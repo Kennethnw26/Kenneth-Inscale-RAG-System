@@ -164,18 +164,15 @@ The system retrieves documents but correctly determines none of them answer the 
 
 ## Limitations
 
-- **No metadata pre-filtering.** The 77 binary taxonomy columns in `documents.csv` (Applications, Harms, Risk factors, etc.) and the authority hierarchy are not used to pre-filter retrieval. For jurisdiction-specific queries this would improve precision.
-- **Pure dense retrieval.** Semantic-only search can miss exact keyword or acronym matches like a specific article number. A hybrid BM25 + dense approach with a reranker would be more robust.
-- **Faithfulness is not measured.** `eval.py` checks that the right documents are retrieved and that out-of-corpus questions are refused, but it does not score whether every sentence in an answer is actually supported by the cited source.
-- **Segment-level context only.** Long documents like the EU AI Act span 254 segments. Answers that require reading across many segments may miss context since each segment is retrieved in isolation.
-- **Top-k is fixed.** There is no adaptive cutoff based on similarity score. A low-relevance query still returns k segments, though the grounding prompt reduces the risk of the LLM using them.
+- **Top-k is fixed.** There is no adaptive cutoff based on similarity score, so a low-relevance query still returns k segments. The grounding prompt reduces the risk of the LLM using them but it is still not ideal.
+- **Segment-level context only.** Long documents like the EU AI Act span 254 segments. Answers that need information spread across multiple segments can feel incomplete since each segment is retrieved in isolation.
+- **Faithfulness is not measured.** `eval.py` checks that the right documents are retrieved and that out-of-corpus questions are refused, but it does not check whether every sentence in the answer is actually supported by the source it cites.
 
 ## What I would do next
 
-1. Add optional metadata filters for authority, jurisdiction, and taxonomy tags as a pre-filter before semantic search.
-2. Add hybrid retrieval using BM25 + dense search and a cross-encoder reranker.
-3. Add an LLM-as-judge faithfulness check to `eval.py` and expand the gold question set.
-4. Add neighbouring segment expansion for long documents so answers can draw on surrounding context.
+1. Try different values of k and see how it affects answer quality for different types of questions.
+2. Look into whether scoring answers against their cited sources (faithfulness) is feasible to add to the evaluation.
+3. Expand the gold question set in `eval.py` to cover more document types and edge cases.
 
 ## Project layout
 
