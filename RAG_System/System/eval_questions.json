@@ -1,0 +1,36 @@
+{
+  "answerable": [
+    {
+      "question": "What does the EU AI Act (Regulation 2024/1689) establish?",
+      "expected_doc_id": "757"
+    },
+    {
+      "question": "What characteristics make an AI system trustworthy according to the NIST AI Risk Management Framework?",
+      "expected_doc_id": "772"
+    },
+    {
+      "question": "What is California's Safe and Secure Innovation for Frontier Artificial Intelligence Models Act?",
+      "expected_doc_id": "1163"
+    },
+    {
+      "question": "What does the US Executive Order on Safe, Secure, and Trustworthy AI require?",
+      "expected_doc_id": "307"
+    },
+    {
+      "question": "What is the legislative intent of China's draft Artificial Intelligence Law?",
+      "expected_doc_id": "1377"
+    },
+    {
+      "question": "What does the law require regarding a digital development infrastructure plan for the Department of Defense?",
+      "expected_doc_id": "1"
+    }
+  ],
+  "unanswerable": [
+    {
+      "question": "What is the capital of France?"
+    },
+    {
+      "question": "What was Apple's revenue in the third quarter of 2023?"
+    }
+  ]
+}

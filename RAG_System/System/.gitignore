@@ -1,0 +1,30 @@
+# Secrets — never commit these
+.env
+*.key
+*.pem
+
+# Built vector store (regenerate with `python ingest.py`)
+chroma_db/
+
+# Dataset (do not commit large data — see README for download instructions)
+dataset/
+data/
+agora/
+*.csv
+*.zip
+fulltext/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
