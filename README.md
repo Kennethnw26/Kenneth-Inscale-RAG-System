@@ -132,7 +132,7 @@ Sources:
 
 **Question 3 - grounding check (answer not in corpus)**
 ```
-$ python cli.py -q "What is the capital of France?"
+$ python cli.py -q "What specific penalties does the UK's AI Liability Framework impose on companies that deploy discriminatory hiring algorithms?"
 
 I don't have enough information in the provided documents to answer that.
 ```
@@ -157,7 +157,7 @@ The system retrieves documents but correctly determines none of them answer the 
   -> hit@5: 6/6 = 100%
 
 === Grounding (refusal on out-of-corpus questions) ===
-  [PASS] What is the capital of France?
+  [PASS] What specific penalties does the UK's AI Liability Framework impose on companies that deploy discriminatory hiring algorithms?
   [PASS] What was Apple's revenue in the third quarter of 2023?
   -> refused: 2/2 = 100%
 ```
@@ -185,5 +185,4 @@ System/
   eval_questions.json  # gold questions (answerable and unanswerable)
   requirements.txt
   .env.example
-  README.md
 ```

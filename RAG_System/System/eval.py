@@ -1,20 +1,9 @@
-"""Lightweight evaluation harness — the answer-quality check.
-
-Two things we measure, mapping to the two ways this system can fail:
-
-1. Retrieval quality (hit@k): for each gold question, does the expected source
-   document appear in the top-k retrieved segments? This isolates retrieval from
-   generation (no LLM call, fast, deterministic).
-
-2. Grounding / refusal: for questions whose answer is NOT in the corpus, does the
-   model correctly refuse instead of hallucinating? This needs a Groq call, so it
-   is skipped automatically if GROQ_API_KEY is unset (use --skip-generation to
-   force retrieval-only).
+"""Evaluation harness: measures retrieval quality (hit@k) and grounding (refusal rate).
 
 Run:
     python eval.py
     python eval.py --k 5
-    python eval.py --skip-generation
+    python eval.py --skip-generation   # retrieval only, no Groq calls
 """
 
 from __future__ import annotations
@@ -27,7 +16,7 @@ from dotenv import load_dotenv
 
 from rag import REFUSAL, answer, retrieve
 
-# Load .env from this file's folder regardless of the IDE working directory.
+# Ensures .env is found regardless of IDE working directory.
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
 
 QUESTIONS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "eval_questions.json")

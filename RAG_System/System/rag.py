@@ -18,23 +18,20 @@ from dataclasses import dataclass
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 
-# Where the AGORA CSVs live. Defaults to the sibling `dataset/agora` folder but
-# can be overridden with the AGORA_DATA_DIR environment variable.
+# Override with AGORA_DATA_DIR env var if the dataset lives elsewhere.
 DATA_DIR = os.environ.get("AGORA_DATA_DIR", os.path.join(_HERE, "..", "dataset", "agora"))
 
-# Persistent vector store, created by `ingest.py`.
+# Persistent vector store — must be built by ingest.py before querying.
 CHROMA_DIR = os.path.join(_HERE, "chroma_db")
 COLLECTION_NAME = "agora_segments"
 
-# all-MiniLM-L6-v2: 384-dim, fast on CPU, strong quality/size tradeoff. See README.
+# 384-dim, CPU-friendly. To swap models, change this and re-run ingest.py.
 EMBED_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
-# Groq generation model. llama-3.3-70b-versatile gives strong instruction
-# following (important for grounding) while staying on Groq's free tier.
+# Strong instruction-following on Groq's free tier.
 GROQ_MODEL = "llama-3.3-70b-versatile"
 
-# The exact string the model must emit when the context cannot answer the
-# question. eval.py checks for this to verify grounding behaviour.
+# eval.py checks for this exact string to verify grounding behaviour.
 REFUSAL = "I don't have enough information in the provided documents to answer that."
 
 SYSTEM_PROMPT = f"""You are a careful assistant answering questions about AI governance \
@@ -69,7 +66,7 @@ def get_collection():
     client = chromadb.PersistentClient(path=CHROMA_DIR)
     try:
         return client.get_collection(COLLECTION_NAME)
-    except Exception as exc:  # collection missing -> guide the user
+    except Exception as exc:
         raise RuntimeError(
             f"Vector store '{COLLECTION_NAME}' not found in {CHROMA_DIR}. "
             "Run `python ingest.py` first."

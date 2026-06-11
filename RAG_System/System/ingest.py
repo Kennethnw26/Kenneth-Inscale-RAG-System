@@ -4,10 +4,6 @@ Run once before querying:
 
     python ingest.py            # build the store (skips if already populated)
     python ingest.py --rebuild  # force a clean rebuild
-
-We embed the `Text` field of each segment (the operative paragraph) and store
-the document-level metadata needed for citations alongside each vector, so the
-query path never has to re-join against documents.csv.
 """
 
 from __future__ import annotations
@@ -26,7 +22,7 @@ from rag import (
     get_embedder,
 )
 
-BATCH_SIZE = 256  # Chroma add() batch size
+BATCH_SIZE = 256
 
 
 def load_documents(data_dir: str) -> dict[str, dict]:
@@ -53,6 +49,7 @@ def load_segments(data_dir: str) -> pd.DataFrame:
 
 
 def build(data_dir: str, rebuild: bool = False) -> None:
+    """Populate the Chroma vector store. Drops and recreates it when rebuild=True."""
     client = chromadb.PersistentClient(path=CHROMA_DIR)
 
     if rebuild:
@@ -64,7 +61,7 @@ def build(data_dir: str, rebuild: bool = False) -> None:
 
     collection = client.get_or_create_collection(
         name=COLLECTION_NAME,
-        metadata={"hnsw:space": "cosine"},  # cosine distance for normalized text embeddings
+        metadata={"hnsw:space": "cosine"},  # required for cosine similarity search
     )
 
     if collection.count() > 0 and not rebuild:

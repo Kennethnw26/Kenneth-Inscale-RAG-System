@@ -17,8 +17,7 @@ from dotenv import load_dotenv
 
 from rag import Source, answer
 
-# Load .env from this file's folder, so it works regardless of the IDE's
-# working directory (clicking "Run" doesn't always cd into System/).
+# Ensures .env is found regardless of IDE working directory.
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
 
 
@@ -35,7 +34,7 @@ def render(answer_text: str, sources: list[Source]) -> str:
 def ask(question: str, k: int) -> None:
     try:
         answer_text, sources = answer(question, k=k)
-    except RuntimeError as exc:  # missing key or unbuilt store -> clean message
+    except RuntimeError as exc:
         print(f"\nError: {exc}")
         return
     print(render(answer_text, sources))
